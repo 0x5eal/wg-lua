@@ -1,0 +1,29 @@
+{
+  "name": "@rbxts/wg-translate-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "out/init.lua",
+  "scripts": {
+    "build": "rbxtsc",
+    "watch": "rbxtsc -w",
+    "postinstall": "patch node_modules/@rbxts/types/include/roblox.d.ts < lune_require_patch.diff",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "types": "out/index.d.ts",
+  "files": [
+    "out",
+    "!**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@rbxts/compiler-types": "2.3.0-types.0",
+    "@rbxts/types": "^1.0.765",
+    "roblox-ts": "^2.3.0",
+    "typescript": "^5.4.3"
+  }
+}

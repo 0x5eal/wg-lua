@@ -1,0 +1,17 @@
+--- roblox.d.ts	2024-03-27 14:21:02.418167012 +0530
++++ node_modules/@rbxts/types/include/roblox.d.ts	2024-03-27 14:22:57.588164607 +0530
+@@ -2635,10 +2635,10 @@
+  * The number reflects the current heap consumption from the operating system perspective, which fluctuates over time as garbage collector frees objects.
+  */
+ declare function gcinfo(): number;
+-/** Runs the supplied ModuleScript if it has not been run already, and returns what the ModuleScript returned (in both cases).
+-
+-If the ModuleScript the user wants to use has been uploaded to Roblox (with the instance’s name being ‘MainModule’), it can be loaded by using the require function on the asset ID of the ModuleScript, though only on the server. */
+-declare function require(moduleScript: ModuleScript | number): unknown;
++/**
++ * Requires a module with a path relative to the current module's path.
++*/
++declare function require<T>(path: string | number): T;
+ /** Runs the specified callback function in a separate thread, without yielding the current thread.
+ The function will be executed the next time Roblox’s Task Scheduler runs an update cycle. This delay will take at least 29 milliseconds but can arbitrarily take longer, depending on the target framerate and various throttling conditions. */
+ declare function spawn(callback: DelayedCallback): void;
