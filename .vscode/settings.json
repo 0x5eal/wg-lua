@@ -10,5 +10,13 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[luau][lua]": {
     "editor.defaultFormatter": "JohnnyMorganz.stylua"
-  }
+  },
+
+  // Linting
+  "eslint.run": "onType",
+  "eslint.format.enable": true,
+
+  // Misc
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.eol": "\n"
 }
