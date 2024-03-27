@@ -1,6 +1,6 @@
 local wg = require("../out/").wireguard
 
-local BASE64_PAT = "^(?:%a%d+/?){4}*(?:%a%d+/?){2}==|(?:%a%d+/?){3}=?$"
+local BASE64_PAT = "^[%w%+%/=]-=?%w=*$"
 
 local keypair = wg:generateKeypair()
 
