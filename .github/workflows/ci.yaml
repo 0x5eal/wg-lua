@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  fmt:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v4.0.2
+        with: 
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Check formatting
+        run: pnpm check_fmt
+
+  lint:
+    needs: ["fmt"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Analyze
+        run: luau-lsp analyze	--settings=".vscode/settings.json" tests
+
+      - name: Lint
+        run: pnpm lint
+
+  ci:
+    needs: ["fmt"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PNPM
+        uses: pnpm/action-setup@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v4.0.2
+        with: 
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test
