@@ -33,7 +33,7 @@ const _atob = (asc: string) => {
 	let r1: number;
 	let r2: number;
 
-	for (let i = 0; i < asc.size(); ) {
+	for (let i = 0; i < asc.size(); i++) {
 		u24 =
 			(b64Table[string.byte(asc, i++)[0]] << 18) |
 			(b64Table[string.byte(asc, i++)[0]] << 12) |

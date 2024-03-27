@@ -19,6 +19,8 @@ export const wireguard: Wireguard = {
 		const privateKey = generatePrivateKey();
 		const publicKey = generatePublicKey(privateKey);
 
+		print(privateKey);
+
 		return {
 			publicKey: atob(publicKey),
 			privateKey: atob(privateKey),

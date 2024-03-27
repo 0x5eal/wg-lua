@@ -1,5 +1,3 @@
-const { atob } = require<{ atob: (buf: number[]) => string }>("base64");
-
 function gf(init?: number[]): number[] {
 	const r = new Array<number>(16, 0);
 	if (init) {

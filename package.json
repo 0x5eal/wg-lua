@@ -1,5 +1,5 @@
 {
-	"name": "wg-lua",
+	"name": "@rbxts/wg-lua",
 	"version": "1.0.0",
 	"description": "A lua implementation of the wireguard keygen algorithm.",
 	"main": "out/init.lua",
