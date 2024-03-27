@@ -1,22 +1,23 @@
 {
-  // Lune
-  "luau-lsp.require.mode": "relativeToFile",
-  "luau-lsp.require.directoryAliases": {
-    "@lune/": "~/.lune/.typedefs/0.8.2/"
-  },
+	// Lune
+	"luau-lsp.require.mode": "relativeToFile",
+	"luau-lsp.require.directoryAliases": {
+		"@lune/": "~/.lune/.typedefs/0.8.2/"
+	},
 
-  // Formatting
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[luau][lua]": {
-    "editor.defaultFormatter": "JohnnyMorganz.stylua"
-  },
+	// Formatting
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[luau][lua]": {
+		"editor.defaultFormatter": "JohnnyMorganz.stylua"
+	},
 
-  // Linting
-  "eslint.run": "onType",
-  "eslint.format.enable": true,
+	// Linting
+	"eslint.run": "onType",
+	"eslint.format.enable": true,
+	"cSpell.enabled": false,
 
-  // Misc
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "files.eol": "\n"
+	// Misc
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"files.eol": "\n"
 }

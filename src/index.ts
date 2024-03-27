@@ -1,26 +1,26 @@
 const { generatePrivateKey, generatePublicKey } = require<{
-  generatePrivateKey: () => number[];
-  generatePublicKey: (privateKey: number[]) => number[];
+	generatePrivateKey: () => number[];
+	generatePublicKey: (privateKey: number[]) => number[];
 }>("wg");
 const { atob } = require<{ atob: (buf: number[]) => string }>("base64");
 
 export interface Keypair {
-  publicKey: string;
-  privateKey: string;
+	publicKey: string;
+	privateKey: string;
 }
 
 export interface Wireguard {
-  generateKeypair(): Keypair;
+	generateKeypair(): Keypair;
 }
 
 export const wireguard: Wireguard = {
-  generateKeypair: function () {
-    const privateKey = generatePrivateKey();
-    const publicKey = generatePublicKey(privateKey);
+	generateKeypair: function () {
+		const privateKey = generatePrivateKey();
+		const publicKey = generatePublicKey(privateKey);
 
-    return {
-      publicKey: atob(publicKey),
-      privateKey: atob(privateKey),
-    };
-  },
+		return {
+			publicKey: atob(publicKey),
+			privateKey: atob(privateKey),
+		};
+	},
 };

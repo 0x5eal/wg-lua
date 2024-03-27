@@ -7,7 +7,9 @@
 		"build": "rbxtsc",
 		"watch": "rbxtsc -w",
 		"lint": "eslint src",
-		"fmt": "prettier .",
+		"check_fmt": "prettier -c src/",
+		"check": "pnpm lint && pnpm check_fmt",
+		"fmt": "prettier -w src/",
 		"postinstall": "patch -f node_modules/@rbxts/types/include/roblox.d.ts < lune_require_patch.diff",
 		"prepublishOnly": "pnpm run build"
 	},
