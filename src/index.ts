@@ -11,6 +11,7 @@ export interface Keypair {
 
 export interface Wireguard {
 	generateKeypair(): Keypair;
+	generatePublicKey(privateKey: number[]): string;
 }
 
 export const wireguard: Wireguard = {
@@ -22,5 +23,9 @@ export const wireguard: Wireguard = {
 			publicKey: atob(publicKey),
 			privateKey: atob(privateKey),
 		};
+	},
+
+	generatePublicKey: function (privateKey) {
+		return atob(generatePublicKey(privateKey));
 	},
 };
