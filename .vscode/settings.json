@@ -1,11 +1,9 @@
 {
-	// Lune
 	"luau-lsp.require.mode": "relativeToFile",
 	"luau-lsp.require.directoryAliases": {
 		"@lune/": "~/.lune/.typedefs/0.8.2/"
 	},
 
-	// Formatting
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"[luau][lua]": {
@@ -15,12 +13,10 @@
 		"editor.defaultFormatter": "mkhl.shfmt"
 	},
 
-	// Linting
 	"eslint.run": "onType",
 	"eslint.format.enable": true,
 	"cSpell.enabled": false,
 
-	// Misc
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"files.eol": "\n"
 }
