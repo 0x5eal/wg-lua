@@ -11,7 +11,6 @@ defaults:
 
 jobs:
   fmt:
-    name: Check formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,22 +32,6 @@ jobs:
 
       - name: Check formatting
         run: pnpm check_fmt
-
-  lint:
-    needs: ["fmt"]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install tooling
-        uses: ok-nick/setup-aftman@v0.4.2
-
-      - name: Analyze
-        run: luau-lsp analyze	--settings=".vscode/settings.json" tests
-
-      - name: Lint
-        run: pnpm lint
 
   ci:
     needs: ["fmt"]
@@ -76,3 +59,24 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  lint:
+    needs: ["ci"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install tooling
+        uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Build
+        run: pnpm build
+
+      - name: Analyze
+        run: luau-lsp analyze	--settings=".vscode/settings.json" tests
+
+      - name: Lint
+        run: pnpm lint
+
+
