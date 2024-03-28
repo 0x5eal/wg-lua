@@ -16,16 +16,19 @@ export interface Wireguard {
 
 export const wireguard: Wireguard = {
 	generateKeypair: function () {
-		const privateKey = generatePrivateKey();
-		const publicKey = generatePublicKey(privateKey);
-
+		const [privateKeyOk, privateKey] = pcall<[], number[]>(() => generatePrivateKey());
+		const [publicKeyOk, publicKey] = privateKeyOk
+			? pcall<[], number[]>(() => generatePublicKey(privateKey))
+			: error("failed to generate private key");
 		return {
-			publicKey: atob(publicKey),
-			privateKey: atob(privateKey),
+			publicKey: atob(publicKeyOk ? publicKey : error("failed to generate public key")),
+			privateKey: atob(privateKey as number[]),
 		};
 	},
 
 	generatePublicKey: function (privateKey) {
-		return atob(generatePublicKey(privateKey));
+		const [publicKeyOk, publicKey] = pcall<[], number[]>(() => generatePublicKey(privateKey));
+
+		return atob(publicKeyOk ? publicKey : error("failed to generate public key"));
 	},
 };
