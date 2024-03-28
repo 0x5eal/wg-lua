@@ -11,6 +11,9 @@
 	"[luau][lua]": {
 		"editor.defaultFormatter": "JohnnyMorganz.stylua"
 	},
+	"[shellscript]": {
+		"editor.defaultFormatter": "mkhl.shfmt"
+	},
 
 	// Linting
 	"eslint.run": "onType",

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#########################################################################
+#   A handy bash script which emulates pre 0.8 lune execution behavior. #
+#   This script checks if there is a lua(u) script at discoverable      #
+#   paths, and if so, executes them with `lune run`, allowing for       #
+#   implicit script execution as before.                                #
+#                 USAGE: ./lunew [ARGS] [PARAMETERS]                    #
+#########################################################################
+
+lune=$(which lune)
+
+if (($(lune --version | cut -d ' ' -f 2 | cut -d '.' -f 2) >= 8)); then
+    ## CUSTOM EXAMPLE RUNNER BEGIN ##
+    if [ "$1" == "example" ]; then
+        filename="$2"
+
+        if [ -z "$filename" ]; then
+            echo "USAGE: $0 example <example_name> [ARGS]"
+            exit 1
+        fi
+
+        shift 2
+        lune run "examples/$filename.luau" "$@"
+        exit $?
+    fi
+    ## CUSTOM EXAMPLE RUNNER END ##
+
+    if compgen -G "$1*" >/dev/null || compgen -G ".lune/$1*" >/dev/null; then
+        lune run "$@"
+        exit $?
+    fi
+fi
+
+lune "$@"
+exit $?
