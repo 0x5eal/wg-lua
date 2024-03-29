@@ -86,7 +86,7 @@ jobs:
                  uses: ok-nick/setup-aftman@v0.4.2
 
                - name: Build
-                 run: pnpm build
+                 run: lune setup && pnpm build
 
                - name: Analyze
                  run: luau-lsp analyze --settings=".vscode/settings.json" tests/ examples/ .lune/
