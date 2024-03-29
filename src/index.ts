@@ -1,8 +1,8 @@
 const { generatePrivateKey, generatePublicKey } = require<{
 	generatePrivateKey: () => number[];
 	generatePublicKey: (privateKey: number[]) => number[];
-}>("wg");
-const { atob } = require<{ atob: (buf: number[]) => string }>("base64");
+}>("./wg.lua");
+const { atob } = require<{ atob: (buf: number[]) => string }>("./base64.lua");
 
 export interface Keypair {
 	publicKey: string;

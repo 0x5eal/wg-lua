@@ -1,6 +1,6 @@
 const { slice } = require<{
 	slice: <T extends defined>(arr: T[], start: number, stop?: number) => T[];
-}>("util");
+}>("./util.lua");
 
 function stringToBytes(str: string) {
 	const result = [];

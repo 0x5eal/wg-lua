@@ -19,7 +19,7 @@
 
 		// configurable
 		"rootDir": "src",
-		"outDir": "out",
+		"outDir": "out/rbxts",
 		"incremental": true,
 		"tsBuildInfoFile": "out/tsconfig.tsbuildinfo",
 		"declaration": true
