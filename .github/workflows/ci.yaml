@@ -89,7 +89,7 @@ jobs:
                  run: lune setup && pnpm build
 
                - name: Analyze
-                 run: luau-lsp analyze --settings=".vscode/settings.json" tests/ examples/ .lune/
+                 run: luau-lsp analyze --ignore=".lune/terracotta" --settings=".vscode/settings.json" tests/ examples/ .lune/
 
                - name: Lint
                  run: pnpm lint
