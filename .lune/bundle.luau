@@ -60,7 +60,11 @@ function main()
 		fs.writeFile(path, bundle)
 	end
 
-	stdio.write(`\x1B[2K\rwrote {#ENTYRPOINTS} files in {os.clock() - fsStart}s`)
+	stdio.write(`\x1B[2K\rwrote {#ENTYRPOINTS} files in {os.clock() - fsStart}s\n`)
+	fs.copy("src/init.luau", "out/init.luau", {
+		overwrite = true,
+	})
+	stdio.write("wrote luau types to out/init.luau!")
 end
 
 return main()
