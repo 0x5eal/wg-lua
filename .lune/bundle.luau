@@ -4,6 +4,8 @@ local task = require("@lune/task")
 
 local terracotta = require("terracotta")
 
+local LUAU_TYPES_PATH = "out/rbxts/init.luau"
+
 local function map<k, v>(tbl: { [k]: v }, callback: (k: k, v: v) -> v)
 	for k, v in tbl do
 		local ok, val = pcall(function()
@@ -24,7 +26,7 @@ print("\n")
 
 local dirChildren = fs.readDir("out/rbxts")
 local ENTYRPOINTS = map(dirChildren, function(k, path)
-	if path ~= "rbxts" and path:find("%.lua$") then
+	if path ~= "rbxts" and path:find("%.lua.$") then
 		print(`{k}/{#dirChildren} include`, path)
 		return "out/rbxts/" .. path
 	end
@@ -53,6 +55,10 @@ function main()
 	for pos, path in ENTYRPOINTS do
 		local bundle = out[path]
 
+		if path == LUAU_TYPES_PATH then
+			bundle = fs.readFile(LUAU_TYPES_PATH)
+		end
+
 		path = "out/" .. path:split("/")[3]
 		stdio.write(`\x1B[2K\r{pos}/{#ENTYRPOINTS} write {path}`)
 		task.wait(0.1)
@@ -61,10 +67,6 @@ function main()
 	end
 
 	stdio.write(`\x1B[2K\rwrote {#ENTYRPOINTS} files in {os.clock() - fsStart}s\n`)
-	fs.copy("src/init.luau", "out/init.luau", {
-		overwrite = true,
-	})
-	stdio.write("wrote luau types to out/init.luau!")
 end
 
 return main()
