@@ -4,10 +4,10 @@ export type Keypair = {
 }
 
 export type Wireguard = {
-	generateKeypair: () -> Keypair,
-	generatePrivateKey: (privateKey: { number }) -> string,
+	generateKeypair: (self: {}) -> Keypair,
+	generatePrivateKey: (self: {}, privateKey: { number }) -> string,
 }
 
 return {
-	wireguard = require("./init.lua") :: Wireguard,
+	wireguard = require("./init.lua").wireguard :: Wireguard,
 }
