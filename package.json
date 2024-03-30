@@ -4,7 +4,6 @@
 	"description": "A lua implementation of the wireguard keygen algorithm.",
 	"main": "out/init.lua",
 	"scripts": {
-		"export": "pnpm build && pnpm pack",
 		"build": "rbxtsc --verbose && ./lunew bundle",
 		"watch": "rbxtsc -w",
 		"lint": "eslint src",
@@ -13,7 +12,7 @@
 		"fmt": "prettier -w src/",
 		"test": "./lunew test",
 		"postinstall": "patch -f node_modules/@rbxts/types/include/roblox.d.ts < lune_require_patch.diff",
-		"prepublishOnly": "pnpm build"
+		"prepack": "pnpm build"
 	},
 	"keywords": [],
 	"author": "",
