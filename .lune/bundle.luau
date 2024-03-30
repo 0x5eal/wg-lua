@@ -53,23 +53,25 @@ function main()
 	print(`\nbundled {#ENTYRPOINTS} files in {os.clock() - bundleStart}s`)
 
 	local fsStart = os.clock()
-	for pos, path in { table.unpack(ENTYRPOINTS), TS_TYPES_PATH } do
+	for pos, path in { TS_TYPES_PATH, table.unpack(ENTYRPOINTS) } do
 		local bundle = out[path]
 
 		if path == LUAU_TYPES_PATH then
 			bundle = fs.readFile(LUAU_TYPES_PATH)
+			print(bundle)
 		elseif path == TS_TYPES_PATH then
-			bundle = fs.readFile(LUAU_TYPES_PATH)
+			bundle = fs.readFile(TS_TYPES_PATH)
+			print(bundle)
 		end
 
 		path = "out/" .. path:split("/")[3]
-		stdio.write(`\x1B[2K\r{pos}/{#ENTYRPOINTS} write {path}`)
+		stdio.write(`\x1B[2K\r{pos}/{#ENTYRPOINTS + 1} write {path}`)
 		task.wait(0.1)
 
 		fs.writeFile(path, bundle)
 	end
 
-	stdio.write(`\x1B[2K\rwrote {#ENTYRPOINTS} files in {os.clock() - fsStart}s\n`)
+	stdio.write(`\x1B[2K\rwrote {#ENTYRPOINTS + 1} files in {os.clock() - fsStart}s\n`)
 end
 
 return main()
