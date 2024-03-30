@@ -6,6 +6,10 @@ on:
                - "**"
      workflow_dispatch:
 
+permissions:
+     actions: write
+     contents: write
+
 jobs:
      publish:
           name: Publish
