@@ -64,7 +64,7 @@ function main()
 
 		path = "out/" .. path:split("/")[3]
 		stdio.write(`\x1B[2K\r{pos}/{#ENTYRPOINTS} write {path}`)
-		task.wait(1)
+		task.wait(0.1)
 
 		fs.writeFile(path, bundle)
 	end
