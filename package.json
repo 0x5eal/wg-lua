@@ -14,8 +14,13 @@
 		"postinstall": "patch -f node_modules/@rbxts/types/include/roblox.d.ts < lune_require_patch.diff",
 		"prepack": "pnpm build"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"wireguard",
+		"lua",
+		"roblox-ts",
+		"cryptography"
+	],
+	"author": "Erica Marigold <hi@devcomp.xyz>",
 	"license": "Apache-2.0",
 	"types": "out/index.d.ts",
 	"files": [
