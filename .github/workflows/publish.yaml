@@ -33,7 +33,7 @@ jobs:
 
                - name: Build package
                  id: export
-                 run: echo "tarball=$(pnpm export | tail -n 1)" >> "$GITHUB_OUTPUT"
+                 run: echo "tarball=$(pnpm pack | tail -n 1)" >> "$GITHUB_OUTPUT"
 
                - name: Publish artifacts
                  uses: ncipollo/release-action@v1
