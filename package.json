@@ -19,7 +19,12 @@
 	"license": "Apache-2.0",
 	"types": "out/index.d.ts",
 	"files": [
-		"out",
+		"lunew",
+		"lunew.bat",
+		"lune_require_patch.diff",
+		"out/init.*",
+		"out/index.*",
+		"!out/rbxts/**",
 		"!**/*.tsbuildinfo"
 	],
 	"publishConfig": {
