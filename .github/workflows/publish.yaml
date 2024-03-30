@@ -1,0 +1,42 @@
+name: Publish
+
+on:
+     push:
+          tags:
+               - "**"
+     workflow_dispatch:
+
+jobs:
+     publish:
+          name: Publish
+          runs-on: ubuntu-latest
+          steps:
+               - name: Checkout repository
+                 uses: actions/checkout@v4
+
+               - name: Install PNPM
+                 uses: pnpm/action-setup@v3
+
+               - name: Install Node
+                 uses: actions/setup-node@v4.0.2
+                 with:
+                      cache: "pnpm"
+
+               - name: Install dependencies
+                 run: pnpm i
+
+               - name: Install tooling
+                 uses: ok-nick/setup-aftman@v0.4.2
+                 with:
+                      cache: true
+
+               - name: Build package
+                 id: export
+                 run: echo "tarball=$(pnpm export | tail -n 1)" >> "$GITHUB_OUTPUT"
+
+               - name: Publish artifacts
+                 uses: ncipollo/release-action@v1
+                 with:
+                      artifacts: "${{ steps.export.outputs.tarball }}"
+                      body: "See [CHANGELOG.md](https://github.com/0x5eal/wg-lua/blob/main/CHANGELOG.md) for more details."
+                      draft: true

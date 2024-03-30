@@ -58,10 +58,8 @@ function main()
 
 		if path == LUAU_TYPES_PATH then
 			bundle = fs.readFile(LUAU_TYPES_PATH)
-			print(bundle)
 		elseif path == TS_TYPES_PATH then
 			bundle = fs.readFile(TS_TYPES_PATH)
-			print(bundle)
 		end
 
 		path = "out/" .. path:split("/")[3]

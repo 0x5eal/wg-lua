@@ -4,6 +4,7 @@
 	"description": "A lua implementation of the wireguard keygen algorithm.",
 	"main": "out/init.lua",
 	"scripts": {
+		"export": "pnpm build && pnpm pack",
 		"build": "rbxtsc --verbose && ./lunew bundle",
 		"watch": "rbxtsc -w",
 		"lint": "eslint src",
