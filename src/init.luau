@@ -5,7 +5,7 @@ export type Keypair = {
 
 export type Wireguard = {
 	generateKeypair: (self: {}) -> Keypair,
-	generatePrivateKey: (self: {}, privateKey: { number }) -> string,
+	generatePublicKey: (self: {}, privateKey: { number }) -> string,
 }
 
 return {
