@@ -1,21 +1,33 @@
-export function slice<T extends defined>(arr: T[], start: number, stop?: number): T[] {
-	const length = arr.size();
+const OCTAL_LOOKUP = ["000", "001", "010", "011", "100", "101", "110", "111"];
 
-	if (start < 0) {
-		start = math.max(length + start, 0);
-	}
+export function toBinary(int: number): string {
+	let bin = string.format("%o", int);
+	bin = bin.gsub(
+		".",
+		(b: string) =>
+			OCTAL_LOOKUP[
+				(() => {
+					const [ok, val] = pcall<[], number>(() => {
+						const res = tonumber(b);
 
-	if (stop === undefined) {
-		stop = length;
-	} else if (stop < 0) {
-		stop = math.max(length + stop, 0);
-	}
+						if (typeIs(res, "nil")) {
+							error("failed to convert to binary");
+						}
 
-	const result: T[] = [];
+						return res;
+					});
 
-	for (let i = start; i < stop; i++) {
-		result.push(arr[i]);
-	}
+					return ok ? val : error(val);
+				})()
+			],
+	)[0];
 
-	return result;
+	// Pad to ensure the binary number is 6 bits
+	bin = "0".rep(6 - bin.size()) + bin;
+
+	return bin;
+}
+
+export function getCharAt(str: string, pos: number): string {
+	return string.char(str.byte(pos)[0]);
 }

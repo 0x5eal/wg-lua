@@ -1,8 +1,11 @@
 const { generatePrivateKey, generatePublicKey } = require<{
 	generatePrivateKey: () => number[];
-	generatePublicKey: (privateKey: number[]) => number[];
+	generatePublicKey: (privateKey: string | number[]) => number[];
 }>("./wg.lua");
-const { atob } = require<{ atob: (buf: number[]) => string }>("./base64.lua");
+const base64 = require<{
+	encode: (buf: number[]) => string;
+	decode: (base64: string) => number[];
+}>("./base64.lua");
 
 export interface Keypair {
 	publicKey: string;
@@ -11,7 +14,7 @@ export interface Keypair {
 
 export interface Wireguard {
 	generateKeypair(): Keypair;
-	generatePublicKey(privateKey: number[]): string;
+	generatePublicKey(privateKey: number[] | string): string;
 }
 
 export const wireguard: Wireguard = {
@@ -21,14 +24,20 @@ export const wireguard: Wireguard = {
 			? pcall<[], number[]>(() => generatePublicKey(privateKey))
 			: error("failed to generate private key");
 		return {
-			publicKey: atob(publicKeyOk ? publicKey : error("failed to generate public key")),
-			privateKey: atob(privateKey as number[]),
+			publicKey: base64.encode(publicKeyOk ? publicKey : error("failed to generate public key")),
+			privateKey: base64.encode(privateKey as number[]),
 		};
 	},
 
 	generatePublicKey: function (privateKey) {
+		if (typeIs(privateKey, "string")) {
+			privateKey = base64.decode(privateKey);
+		}
+
 		const [publicKeyOk, publicKey] = pcall<[], number[]>(() => generatePublicKey(privateKey));
 
-		return atob(publicKeyOk ? publicKey : error("failed to generate public key"));
+		return base64.encode(
+			publicKeyOk ? publicKey : error("failed to generate public key %s".format(publicKey as string)),
+		);
 	},
 };

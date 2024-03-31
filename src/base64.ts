@@ -1,59 +1,13 @@
-const { slice } = require<{
-	slice: <T extends defined>(arr: T[], start: number, stop?: number) => T[];
+const { toBinary, getCharAt } = require<{
+	toBinary: (int: number) => string;
+	getCharAt: (str: string, pos: number) => string;
 }>("./util.lua");
 
-function stringToBytes(str: string) {
-	const result = [];
-
-	for (let i = 0; i < str.size(); i++) {
-		result.push(string.byte(str, i + 1)[0]);
-	}
-
-	return result;
-}
-
-// Adapted from https://github.com/un-ts/ab64/blob/main/src/ponyfill.ts#L24
-const _atob = (asc: string) => {
-	const b64CharList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-
-	const b64Chars = string.split(b64CharList, "");
-
-	const b64Table = b64Chars.reduce<Record<string, number>>((acc, char, index) => {
-		acc[char] = index;
-		return acc;
-	}, {});
-
-	const fromCharCode = string.char;
-
-	asc = string.gsub(asc, "%s+", "")[0];
-	asc += string.char(...slice(stringToBytes("=="), 2 - (asc.size() & 3)));
-
-	let u24: number;
-	let binary = "";
-	let r1: number;
-	let r2: number;
-
-	for (let i = 0; i < asc.size(); i++) {
-		u24 =
-			(b64Table[string.byte(asc, i++)[0]] << 18) |
-			(b64Table[string.byte(asc, i++)[0]] << 12) |
-			((r1 = b64Table[string.byte(asc, i++)[0]]) << 6) |
-			(r2 = b64Table[string.byte(asc, i++)[0]]);
-		binary +=
-			r1 === 64
-				? fromCharCode((u24 >> 16) & 255)
-				: r2 === 64
-					? fromCharCode((u24 >> 16) & 255, (u24 >> 8) & 255)
-					: fromCharCode((u24 >> 16) & 255, (u24 >> 8) & 255, u24 & 255);
-	}
-
-	return binary;
-};
+const BASE64_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 // Adapted from https://gist.github.com/jonleighton/958841
-export function atob(buf: number[]): string {
+export function encode(buf: number[]): string {
 	let base64 = "";
-	const encodings = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 	const byteLength = buf.size();
 	const byteRemainder = byteLength % 3;
@@ -75,10 +29,10 @@ export function atob(buf: number[]): string {
 
 		// Convert the raw binary segments to the appropriate ASCII encoding
 		base64 +=
-			string.char(string.byte(encodings, a + 1)[0]) +
-			string.char(string.byte(encodings, b + 1)[0]) +
-			string.char(string.byte(encodings, c + 1)[0]) +
-			string.char(string.byte(encodings, d + 1)[0]);
+			string.char(string.byte(BASE64_CHAR, a + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, b + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, c + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, d + 1)[0]);
 	}
 
 	// Deal with the remaining bytes and padding
@@ -90,7 +44,7 @@ export function atob(buf: number[]): string {
 		// Set the 4 least significant bits to zero
 		b = (chunk & 3) << 4;
 
-		base64 += string.byte(encodings, a)[0] + string.byte(encodings, b)[0] + "==";
+		base64 += string.byte(BASE64_CHAR, a)[0] + string.byte(BASE64_CHAR, b)[0] + "==";
 	} else if (byteRemainder === 2) {
 		chunk = (buf[mainLength] << 8) | buf[mainLength + 1];
 
@@ -101,11 +55,50 @@ export function atob(buf: number[]): string {
 		c = (chunk & 15) << 2;
 
 		base64 +=
-			string.char(string.byte(encodings, a + 1)[0]) +
-			string.char(string.byte(encodings, b + 1)[0]) +
-			string.char(string.byte(encodings, c + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, a + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, b + 1)[0]) +
+			string.char(string.byte(BASE64_CHAR, c + 1)[0]) +
 			"=";
 	}
 
 	return base64;
+}
+
+// FIXME: Ideally, you'd want to use bit math and mask off bytes and stuff,
+// but I'm lazy, so this logic uses string manipulation instead
+export function decode(base64: string): number[] {
+	// Strip padding from base64
+	base64 = base64.split("=")[0].gsub("%s", "")[0];
+
+	// Convert base64 chars to lookup table offsets
+	const chars = [];
+	for (let i = 1; i <= base64.size(); i++) {
+		const char = getCharAt(base64, i);
+		const [pos] = string.find(BASE64_CHAR, char);
+
+		pos !== undefined ? chars.push(pos - 1) : error("invalid base64 data");
+	}
+
+	// Convert offsets to 6 bit binary numbers
+	const bin = chars.map(toBinary);
+
+	// Combine all binary numbers into one
+	let combinedBin = "";
+	bin.forEach((b) => (combinedBin += b));
+
+	// Split the combined binary number into smaller ones of 8 bits each
+	const intermediaryBin = [];
+	while (combinedBin.size() > 0) {
+		intermediaryBin.push(string.sub(combinedBin, 1, 8));
+		combinedBin = string.sub(combinedBin, 9, combinedBin.size());
+	}
+
+	// Convert each individual 8 bit binary number to a base 10 integer
+	const decoded = [];
+	for (let i = 0; i < intermediaryBin.size() - 1; i++) {
+		const byte = tonumber(intermediaryBin[i], 2);
+		decoded.push(byte !== undefined ? byte : error("got invalid byte while decoding base64"));
+	}
+
+	return decoded;
 }
