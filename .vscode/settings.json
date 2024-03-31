@@ -18,5 +18,11 @@
 	"cSpell.enabled": false,
 
 	"typescript.tsdk": "node_modules/typescript/lib",
-	"files.eol": "\n"
+	"files.eol": "\n",
+	"markdownlint.config": {
+		"default": true,
+		"MD030": {
+			"ul_single": 4
+		}
+	}
 }
