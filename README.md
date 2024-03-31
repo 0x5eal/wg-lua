@@ -17,7 +17,7 @@ print(wg:generatePublicKey(keypair.privateKey))
 
 - #### Wireguard:generateKeypair() -> { publicKey: string, privateKey: string }
     > Generates a wireguard keypair consisting of a public and private key.
-- #### Wireguard:generatePublicKey(privateKey: { number }) -> string
+- #### Wireguard:generatePublicKey(privateKey: { number } | string) -> string
     > Generates a wireguard public key, given a private key.
 
 ## Development
